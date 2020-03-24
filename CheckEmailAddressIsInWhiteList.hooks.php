@@ -36,7 +36,7 @@ class CheckEmailAddressIsInWhiteListHooks {
 			$srcfile = $wgCheckEmailAddressIsInWhiteListDomainSources[ 'src' ];
 
 			if( file_exists( $srcfile ) ) {
-				$domlines = file( $srcfile );
+				$domlines = file( $srcfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
 			} else {
 				$abortError = wfMessage( 'checkemailaddressisinwhitelist-fileerror' )->text();
                                 $abortError =  $wgCheckEmailAddressIsInWhiteListDomainSources[ 'src' ];
@@ -60,8 +60,8 @@ class CheckEmailAddressIsInWhiteListHooks {
 					return true;
 				}
 			}
-                        $list = natural_language_join($domlines, 'or');
-			$abortError = wfMessage( 'checkemailaddressisinwhitelist-domainerror', $list )->text();
+                        $liststring = natural_language_join($domlines, wfMessage( 'checkemailaddressisinwhitelist-domainconjunction'));
+			$abortError = wfMessage( 'checkemailaddressisinwhitelist-domainerror', $liststring )->text();
 			return false;
 		}
 		return true;
